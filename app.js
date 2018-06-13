@@ -19,15 +19,20 @@ var server = app.listen(8080, () => {
 /* Actual = 949fddbf3b7361f1c676aae09b */
 /* Dev = 9c6d356203b7500b808df7992c */
 
+app.get('/', (req, res) => {
+    res.status(403).json({"Allow": "POST"});
+})
 
 app.post('/', (req, res) => {
     if ((req.body.text.indexOf("remind Noah")!=-1) || (req.body.text.indexOf("Remind Noah")!=-1)) {
         let name = req.body.name.split(" ");
+        console.log("Processed post request")
         res.json({
             "bot_id": "9c6d356203b7500b808df7992c",
             "text": `Noah, ${name[0]} would like to remind you to buy dice. You have now been without dice for ${timeDiff()} days.`
         })
    } else {
+       console.log("Rejected invalid post resquest")
        res.status(200).send("No Response Required")
    }
 })
