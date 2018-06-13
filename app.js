@@ -85,7 +85,7 @@ async function makePost(text) {
 
 async function setSession(command) {
     if (command[2] != undefined) {
-        let newSession = command[2].split(" ");
+        let newSession = command[2].split("-");
         nextSession = new Date(`${newSession[0]}-${newSession[1]}-${newSession[2]}T${newSession[3]}:${newSession[4]}:${newSession[6]}`);
         makePost("Session set!");
     }
