@@ -70,7 +70,7 @@ async function scheduleRemind() {
       });
 };
 
-async function makePost(text) {
+function makePost(text) {
     axios.post('https://api.groupme.com/v3/bots/post', {
         "bot_id": "9c6d356203b7500b808df7992c",
         "text": text
@@ -83,7 +83,7 @@ async function makePost(text) {
         });
 }
 
-async function setSession(command) {
+function setSession(command) {
     if (command[2] != undefined) {
         let newSession = command[2].split("-");
         nextSession = new Date(`${newSession[0]}-${newSession[1]}-${newSession[2]}T${newSession[3]}:${newSession[4]}:${newSession[6]}`);
