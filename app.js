@@ -7,12 +7,15 @@ var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+var port = process.env.PORT || 3000;
+
 function timeDiff() {
     let firstDate = new Date("10/20/2016"), secondDate = new Date(Date.now());
     return (Math.ceil(Math.abs(secondDate.getTime() - firstDate.getTime())/ (1000*3600*24))-1);
 }
 
-var server = app.listen(8080, () => {
+var server = app.listen(port, () => {
+    console.log(`Listening on Port ${port}`)
 })
 
 
