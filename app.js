@@ -12,7 +12,7 @@ var nextSession = new Date("10/20/2016");
 
 function timeDiff(firstDate = new Date("10/20/2016")) {
     let secondDate = new Date(Date.now());
-    return (Math.ceil((secondDate.getTime() - firstDate.getTime())/ (1000*3600)));
+    return (Math.ceil(-1*(secondDate.getTime() - firstDate.getTime())/ (1000*3600)));
 }
 
 var server = app.listen(port, () => {
@@ -42,7 +42,7 @@ app.post('/', (req, res) => {
         let name = req.body.name.split(" ");
 
         console.log("Processed post request");
-        makePost(`Noah, ${name[0]} would like to remind you to buy dice. You have now been without dice for ${Math.ceil(timeDiff()/24)-1} days.`);
+        makePost(`Noah, ${name[0]} would like to remind you to buy dice. You have now been without dice for ${Math.ceil(-1*timeDiff()/24)-1} days.`);
         res.sendStatus(200);
     } else if (req.body.text.indexOf("When is the next session?")!=-1) {
         var until = timeDiff(nextSession);
