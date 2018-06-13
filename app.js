@@ -23,24 +23,36 @@ var server = app.listen(port, () => {
 /* Dev = 9c6d356203b7500b808df7992c */
 
 app.get('/', (req, res) => {
-    res.status(403).json({"Allow": "POST"});
+    res.set('Access-Control-Allow-Methods', 'POST');
+    res.set('Access-Control-Expose-Headers', 'Access-Controll-Allow-Methods');
+    res.status(403).send("Not Allowed");
 })
 
 app.post('/', (req, res) => {
     if ((req.body.text.indexOf("remind Noah")!=-1) || (req.body.text.indexOf("Remind Noah")!=-1)) {
         let name = req.body.name.split(" ");
+
         console.log("Processed post request")
-        res.json({
+
+        axios.post('https://api.groupme.com/v3/bots/post', {
             "bot_id": "9c6d356203b7500b808df7992c",
             "text": `Noah, ${name[0]} would like to remind you to buy dice. You have now been without dice for ${timeDiff()} days.`
         })
-   } else {
+            .then(function (response) {
+                res.status(200).send("Successfully Posted");
+            })
+            .catch(function (error) {
+                res.status(500).send("GroupMe Rejected Response")
+                console.log(error);
+                console.log(error.stack);
+            });
+    } else {
        console.log("Rejected invalid post resquest")
-       res.status(200).send("No Response Required")
+       res.status(400).send("Not a valid GroupMe Post")
    }
 })
 
-async function remind() {
+async function schedule_remind() {
     axios.post('https://api.groupme.com/v3/bots/post', {
         "bot_id": "9c6d356203b7500b808df7992c",
         "text": `Hi, Noah. This is your scheduled reminder to buy dice. You have now been without dice for ${timeDiff()} days.`
