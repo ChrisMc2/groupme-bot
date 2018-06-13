@@ -36,7 +36,6 @@ async function remind() {
     axios.post('https://api.groupme.com/v3/bots/post', {
         "bot_id": "9c6d356203b7500b808df7992c",
         "text": `Hi, Noah. This is your scheduled reminder to buy dice. You have now been without dice for ${timeDiff()} days.`
-//        "text": `Noah, Christopher would like to remind you to buy dice. You have now been without dice for ${timeDiff()} days.`        
         })
       .then(function (response) {
       })
@@ -44,5 +43,3 @@ async function remind() {
           console.log(error);
       });
 };
-
-remind();
