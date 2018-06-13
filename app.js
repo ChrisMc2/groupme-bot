@@ -30,32 +30,44 @@ app.get('/', (req, res) => {
 })
 
 app.post('/', (req, res) => {
-    var command = req.body.text.split(" ");
+//     var command = req.body.text.split(" ");
 
-    if ((command[0]==="bot") && (command.length >= 2))  {
-        let fun = global[command[1]];
-        if (typeof fun === "function") fun(command);
-        else makePost("Invalid command");
-        res.status(200).send("Handled by function");
+//     if ((command[0]==="bot") && (command.length >= 2))  {
+//         let fun = global[command[1]];
+//         if (typeof fun === "function") fun(command);
+//         else makePost("Invalid command");
+//         res.status(200).send("Handled by function");
 
-    } else if ((req.body.text.indexOf("remind Noah")!=-1) || (req.body.text.indexOf("Remind Noah")!=-1)) {
-        let name = req.body.name.split(" ");
+//     } else if ((req.body.text.indexOf("remind Noah")!=-1) || (req.body.text.indexOf("Remind Noah")!=-1)) {
+//         let name = req.body.name.split(" ");
 
-        console.log("Processed post request");
-        makePost(`Noah, ${name[0]} would like to remind you to buy dice. You have now been without dice for ${Math.ceil(-1*timeDiff()/24)-1} days.`);
-        res.sendStatus(200);
-    } else if (req.body.text.indexOf("When is the next session?")!=-1) {
-        var until = timeDiff(nextSession);
-        if (until > 0) {
-            makePost(`The next session is in ${Math.floor(until/24)} day and ${until%24} hours`);
-        } else {
-            makePost(`The next session hasn't been scheduled yet. Feel free to set it using the call "bot setSession yyyy-mm-dd-hh-mm-ss"`);
-        }
-        res.sendStatus(200);
-    } else {
-       console.log("Rejected invalid post resquest")
-       res.status(400).send("Not a valid GroupMe Post")
-   }
+//         console.log("Processed post request");
+//         makePost(`Noah, ${name[0]} would like to remind you to buy dice. You have now been without dice for ${Math.ceil(-1*timeDiff()/24)-1} days.`);
+//         res.sendStatus(200);
+//     } else if (req.body.text.indexOf("When is the next session?")!=-1) {
+//         var until = timeDiff(nextSession);
+//         if (until > 0) {
+//             makePost(`The next session is in ${Math.floor(until/24)} day and ${until%24} hours`);
+//         } else {
+//             makePost(`The next session hasn't been scheduled yet. Feel free to set it using the call "bot setSession yyyy-mm-dd-hh-mm-ss"`);
+//         }
+//         res.sendStatus(200);
+//     } else {
+//        console.log("Rejected invalid post resquest")
+//        res.status(400).send("Not a valid GroupMe Post")
+//    }
+
+if ((req.body.text.indexOf("remind Noah")!=-1) || (req.body.text.indexOf("Remind Noah")!=-1)) {
+    let name = req.body.name.split(" ");
+
+    console.log("Processed post request");
+    makePost(`Noah, ${name[0]} would like to remind you to buy dice. You have now been without dice for ${Math.ceil(-1*timeDiff()/24)-1} days.`);
+    res.sendStatus(200);
+} else {
+    console.log("Rejected invalid post resquest")
+    res.status(400).send("Not a valid GroupMe Post")
+}
+
 })
 
 async function scheduleRemind() {
@@ -72,7 +84,7 @@ async function scheduleRemind() {
 
 function makePost(text) {
     axios.post('https://api.groupme.com/v3/bots/post', {
-        "bot_id": "9c6d356203b7500b808df7992c",
+        "bot_id": "949fddbf3b7361f1c676aae09b",
         "text": text
     })
         .then(function (response) {
@@ -89,4 +101,4 @@ function setSession(command) {
         nextSession = new Date(`${newSession[0]}-${newSession[1]}-${newSession[2]}T${newSession[3]}:${newSession[4]}:${newSession[6]}`);
         makePost("Session set!");
     }
-};
+}
