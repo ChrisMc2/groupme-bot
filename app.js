@@ -35,7 +35,8 @@ app.post('/', (req, res) => {
     if (command[0]==="bot" && (command.length >= 2))  {
         let fun = global[command[1]];
         if (typeof fun === "function") fun(command);
-        else ()
+        else makePost("Invalid command");
+        res.status(200).send("Handled by function");
 
     } else if ((req.body.text.indexOf("remind Noah")!=-1) || (req.body.text.indexOf("Remind Noah")!=-1)) {
         let name = req.body.text.split(" ");
@@ -52,7 +53,6 @@ app.post('/', (req, res) => {
         
     } else {
        console.log("Rejected invalid post resquest")
-       console.log
        res.status(400).send("Not a valid GroupMe Post")
    }
 })
