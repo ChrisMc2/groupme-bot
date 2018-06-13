@@ -83,10 +83,10 @@ async function makePost(text) {
         });
 }
 
-async function setSess(command) {
+async function setSession(command) {
     if (command[2] != undefined) {
-        //make a date parsing function later
-
-
+        let newSession = command[2].split(" ");
+        nextSession = new Date(`${newSession[0]}-${newSession[1]}-${newSession[2]}T${newSession[3]}:${newSession[4]}:${newSession[6]}`);
+        makePost("Session set!");
     }
 };
