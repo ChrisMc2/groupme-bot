@@ -8,10 +8,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 var port = process.env.PORT || 3000;
+var nextSession = new Date("10/20/2016");
 
-function timeDiff() {
-    let firstDate = new Date("10/20/2016"), secondDate = new Date(Date.now());
-    return (Math.ceil(Math.abs(secondDate.getTime() - firstDate.getTime())/ (1000*3600*24))-1);
+function timeDiff(firstDate = new Date("10/20/2016")) {
+    let secondDate = new Date(Date.now());
+    return (Math.ceil((secondDate.getTime() - firstDate.getTime())/ (1000*3600)));
 }
 
 var server = app.listen(port, () => {
@@ -29,30 +30,34 @@ app.get('/', (req, res) => {
 })
 
 app.post('/', (req, res) => {
-    if ((req.body.text.indexOf("remind Noah")!=-1) || (req.body.text.indexOf("Remind Noah")!=-1)) {
-        let name = req.body.name.split(" ");
+    var command = req.body.text.split(" ");
 
-        console.log("Processed post request")
+    if (command[0]==="bot" && (command.length >= 2))  {
+        let fun = global[command[1]];
+        if (typeof fun === "function") fun(command);
+        else ()
 
-        axios.post('https://api.groupme.com/v3/bots/post', {
-            "bot_id": "9c6d356203b7500b808df7992c",
-            "text": `Noah, ${name[0]} would like to remind you to buy dice. You have now been without dice for ${timeDiff()} days.`
-        })
-            .then(function (response) {
-                res.status(200).send("Successfully Posted");
-            })
-            .catch(function (error) {
-                res.status(500).send("GroupMe Rejected Response")
-                console.log(error);
-                console.log(error.stack);
-            });
+    } else if ((req.body.text.indexOf("remind Noah")!=-1) || (req.body.text.indexOf("Remind Noah")!=-1)) {
+        let name = req.body.text.split(" ");
+
+        console.log("Processed post request");
+        makePost(`Noah, ${name[0]} would like to remind you to buy dice. You have now been without dice for ${Math.ceil(timeDiff()/24)-1} days.`);
+    } else if (req.body.text.indexOf("When is the next session?")!=-1) {
+        var until = timeDiff(nextSession);
+        if (until > 0) {
+            makePost(`The next session is in ${Math.floor(until/24)} day and ${until%24} hours`);
+        } else {
+            makePost(`The next session hasn't been scheduled yet. Feel free to set it using the call "bot setSession yyyy-mm-dd-hh-mm-ss"`);
+        }
+        
     } else {
        console.log("Rejected invalid post resquest")
+       console.log
        res.status(400).send("Not a valid GroupMe Post")
    }
 })
 
-async function schedule_remind() {
+async function scheduleRemind() {
     axios.post('https://api.groupme.com/v3/bots/post', {
         "bot_id": "9c6d356203b7500b808df7992c",
         "text": `Hi, Noah. This is your scheduled reminder to buy dice. You have now been without dice for ${timeDiff()} days.`
@@ -62,4 +67,27 @@ async function schedule_remind() {
       .catch(function (error) {
           console.log(error);
       });
+};
+
+async function makePost(text) {
+    axios.post('https://api.groupme.com/v3/bots/post', {
+        "bot_id": "9c6d356203b7500b808df7992c",
+        "text": text
+    })
+        .then(function (response) {
+            res.status(200).send("Successfully Posted");
+        })
+        .catch(function (error) {
+            res.status(500).send("GroupMe Rejected Response")
+            console.log(error);
+            console.log(error.stack);
+        });
+}
+
+async function setSess(command) {
+    if (command[2] != undefined) {
+        //make a date parsing function later
+
+
+    }
 };
