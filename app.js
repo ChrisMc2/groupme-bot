@@ -39,7 +39,7 @@ app.post('/', (req, res) => {
         res.status(200).send("Handled by function");
 
     } else if ((req.body.text.indexOf("remind Noah")!=-1) || (req.body.text.indexOf("Remind Noah")!=-1)) {
-        let name = req.body.text.split(" ");
+        let name = req.body.name.split(" ");
 
         console.log("Processed post request");
         makePost(`Noah, ${name[0]} would like to remind you to buy dice. You have now been without dice for ${Math.ceil(timeDiff()/24)-1} days.`);
