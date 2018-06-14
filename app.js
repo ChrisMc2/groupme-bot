@@ -30,8 +30,7 @@ app.get('/', (req, res) => {
 })
 
 app.post('/', (req, res) => {
-    console.log(JSON.stringify(req.body));
-    //     var command = req.body.text.split(" ");
+//     var command = req.body.text.split(" ");
 
 //     if ((command[0]==="bot") && (command.length >= 2))  {
 //         let fun = global[command[1]];
@@ -62,7 +61,7 @@ if ((req.body.text.indexOf("remind Noah")!=-1) || (req.body.text.indexOf("Remind
     let name = req.body.name.split(" ");
 
     console.log("Processed post request");
-    makePost(`@Noah Latham , ${name[0]} would like to remind you to buy dice. You have now been without dice for ${Math.ceil(-1*timeDiff()/24)-1} days.`);
+    callOutNoah(`@Noah Latham , ${name[0]} would like to remind you to buy dice. You have now been without dice for ${Math.ceil(-1*timeDiff()/24)-1} days.`);
     res.sendStatus(200);
 } else {
     console.log("Rejected invalid post resquest")
@@ -95,6 +94,27 @@ function makePost(text) {
             console.log(error.stack);
         });
 }
+
+function callOutNoah(text) {
+    axios.post('https://api.groupme.com/v3/bots/post', {
+        "bot_id": "949fddbf3b7361f1c676aae09b",
+        "text": text,
+        "attachments": [
+            {
+                "loci":[[5,12]],
+                "type":"mentions",
+                "user_ids":["39103688"]
+            }
+        ]
+    })
+        .then(function (response) {
+        })
+        .catch(function (error) {
+            console.log(error);
+            console.log(error.stack);
+        });
+}
+
 
 function setSession(command) {
     if (command[2] != undefined) {
