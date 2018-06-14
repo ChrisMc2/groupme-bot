@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
-const debug = require('debug')('app');
 
 var app = express();
 
@@ -31,8 +30,8 @@ app.get('/', (req, res) => {
 })
 
 app.post('/', (req, res) => {
-    debug(req.body);
-//     var command = req.body.text.split(" ");
+    console.log(JSON.stringify(req.body));
+    //     var command = req.body.text.split(" ");
 
 //     if ((command[0]==="bot") && (command.length >= 2))  {
 //         let fun = global[command[1]];
