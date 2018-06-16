@@ -57,11 +57,11 @@ app.post('/', (req, res) => {
 //        res.status(400).send("Not a valid GroupMe Post")
 //    }
 
-if ((req.body.text.indexOf("remind Noah")!=-1) || (req.body.text.indexOf("Remind Noah")!=-1)) {
+if (req.body.text.toLower().indexOf("remind noah")!=-1) {
     let name = req.body.name.split(" ");
 
     console.log("Processed post request");
-    callOutNoah(`@Noah Latham , ${name[0]} would like to remind you to buy dice. You have now been without dice for ${Math.ceil(-1*timeDiff()/24)-1} days.`);
+    callOutNoah(`Hi Noah, ${name[0]} would like to remind you to buy dice. You have now been without dice for ${Math.ceil(-1*timeDiff()/24)-1} days.`);
     res.sendStatus(200);
 } else {
     console.log("Rejected invalid post resquest")
@@ -101,7 +101,7 @@ function callOutNoah(text) {
         "text": text,
         "attachments": [
             {
-                "loci":[[5,12]],
+                "loci":[[text.indexOf("buy dice"), 8]],
                 "type":"mentions",
                 "user_ids":["39103688"]
             }
