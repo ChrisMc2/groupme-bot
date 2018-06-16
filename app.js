@@ -57,7 +57,7 @@ app.post('/', (req, res) => {
 //        res.status(400).send("Not a valid GroupMe Post")
 //    }
 
-if (req.body.text.toLower().indexOf("remind noah")!=-1) {
+if (req.body.text.toLowerCase().indexOf("remind noah")!=-1) {
     let name = req.body.name.split(" ");
 
     console.log("Processed post request");
